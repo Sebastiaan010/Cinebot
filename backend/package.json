@@ -1,0 +1,21 @@
+{
+  "name": "cinebot-backend",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --env-file=.env server.js",
+    "create": "node --env-file=.env create.js"
+  },
+  "dependencies": {
+    "@langchain/community": "^0.3.0",
+    "@langchain/core": "^0.3.0",
+    "@langchain/langgraph": "^0.2.0",
+    "@langchain/openai": "^0.3.0",
+    "@langchain/textsplitters": "^0.1.0",
+    "cors": "^2.8.6",
+    "express": "^4.21.2",
+    "faiss-node": "^0.5.1",
+    "langchain": "^0.3.0"
+  }
+}
