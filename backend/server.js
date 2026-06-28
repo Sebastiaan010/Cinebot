@@ -3,7 +3,6 @@ import cors from "cors";
 import { agent } from "./agent.js";
 import { ToolMessage } from "@langchain/core/messages";
 
-// Vang alle unhandled rejections op zodat de server niet stopt
 process.on("unhandledRejection", (reason) => {
     console.error("[unhandledRejection]", reason);
 });
@@ -33,9 +32,20 @@ app.post("/api/chat", async (req, res) => {
 
         const answer = result.messages.at(-1).content;
 
-        const usedTools = result.messages
-            .filter(m => m instanceof ToolMessage)
-            .map(m => m.name);
+        // Check welke tools zijn aangeroepen
+        const toolMessages = result.messages.filter(m => m instanceof ToolMessage);
+        const usedTools = toolMessages.map(m => m.name);
+
+        // Log per tool ook het brondocument als het de retrieve tool is
+        for (const toolMsg of toolMessages) {
+            console.log(`[tool] ${toolMsg.name} aangeroepen`);
+            if (toolMsg.name === "retrieve") {
+                // De content bevat de tekst uit de vectorstore
+                // We loggen de eerste 200 tekens zodat je ziet waar het vandaan komt
+                const preview = toolMsg.content?.slice(0, 200) ?? "";
+                console.log(`[retrieve] gevonden tekst: "${preview}..."`);
+            }
+        }
 
         console.log(`[tools gebruikt] ${usedTools.join(", ") || "geen"}`);
 

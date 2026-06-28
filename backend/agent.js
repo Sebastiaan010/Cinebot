@@ -13,7 +13,10 @@ const retrieveTool = tool(
     async ({ query }) => {
         console.log(`🔧 retrieveTool aangeroepen met query: ${query}`);
         const results = await searchDocuments(query, 3);
-        return results.map(r => r.content).join("\n\n");
+        // Log welke documenten gevonden zijn
+        const sources = [...new Set(results.map(r => r.source))];
+        console.log(`[retrieve] gezocht in documenten: ${sources.join(", ")}`);
+        return results.map(r => `[bron: ${r.source}]\n${r.content}`).join("\n\n");
     },
     {
         name: "retrieve",
